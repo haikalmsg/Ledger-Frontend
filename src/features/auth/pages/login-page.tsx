@@ -32,42 +32,44 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "40px auto" }}>
-      <h1>Login</h1>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flex: 1, width: "100%" }}>
+      <div style={{ width: "100%", maxWidth: "400px" }}>
+        <h1>Login</h1>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div style={{ marginBottom: "12px" }}>
-          <label>Email</label>
-          <input
-            type="email"
-            {...register("email")}
-            style={{ display: "block", width: "100%", padding: "8px" }}
-          />
-          {errors.email && (
-            <p style={{ color: "red" }}>{errors.email.message}</p>
-          )}
-        </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div style={{ marginBottom: "12px" }}>
+            <label>Email</label>
+            <input
+              type="email"
+              {...register("email")}
+              style={{ display: "block", width: "100%", padding: "8px" }}
+            />
+            {errors.email && (
+              <p style={{ color: "red" }}>{errors.email.message}</p>
+            )}
+          </div>
 
-        <div style={{ marginBottom: "12px" }}>
-          <label>Password</label>
-          <input
-            type="password"
-            {...register("password")}
-            style={{ display: "block", width: "100%", padding: "8px" }}
-          />
-          {errors.password && (
-            <p style={{ color: "red" }}>{errors.password.message}</p>
-          )}
-        </div>
+          <div style={{ marginBottom: "12px" }}>
+            <label>Password</label>
+            <input
+              type="password"
+              {...register("password")}
+              style={{ display: "block", width: "100%", padding: "8px" }}
+            />
+            {errors.password && (
+              <p style={{ color: "red" }}>{errors.password.message}</p>
+            )}
+          </div>
 
-        <button
-          type="submit"
-          disabled={loginMutation.isPending}
-          style={{ padding: "8px 12px" }}
-        >
-          {loginMutation.isPending ? "Logging in..." : "Login"}
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={loginMutation.isPending}
+            style={{ padding: "8px 12px" }}
+          >
+            {loginMutation.isPending ? "Logging in..." : "Login"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
