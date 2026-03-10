@@ -1,8 +1,11 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../schemas/login-schema";
 import type { LoginSchema } from "../schemas/login-schema";
 import { useLogin } from "../hooks/use-login";
+import type { LoginErrorResponse } from "../types";
+import { AxiosError } from 'axios';
 
 export default function LoginPage() {
   const loginMutation = useLogin();
@@ -18,15 +21,19 @@ export default function LoginPage() {
       password: "",
     },
   });
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const onSubmit = (data: LoginSchema) => {
     loginMutation.mutate(data, {
       onSuccess: (response) => {
         localStorage.setItem("access_token", response.access_token);
-        alert("Login success");
+        window.location.href = "/dashboard";
       },
-      onError: (error) => {
-        alert(error.message || "Login failed");
+      onError: (error : Error) => {
+        const axiosError = error as AxiosError<LoginErrorResponse>;
+        setLoginError(() => axiosError.response?.data?.detail || axiosError.message || "Login failed")
+      
+
       },
     });
   };
@@ -60,7 +67,9 @@ export default function LoginPage() {
               <p style={{ color: "red" }}>{errors.password.message}</p>
             )}
           </div>
-
+          {loginError && (
+            <p style={{ color: "red", marginBottom: "12px" }}>{loginError}</p>
+          )}
           <button
             type="submit"
             disabled={loginMutation.isPending}
