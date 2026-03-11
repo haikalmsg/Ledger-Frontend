@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
-import LoginPage from "./features/auth/pages/login-page";
-import RegisterPage from "./features/auth/pages/register-page";
-import RegisterSuccessPage from "./features/auth/pages/register-sucess-page";
-import DashboardPage from "./features/dashboard/pages/dashboard";
+import LoginPage from "./features/auth/pages/loginPage/login-page";
+import RegisterPage from "./features/auth/pages/registerPage/register-page";
+import RegisterSuccessPage from "./features/auth/pages/registerSucessPage/register-sucess-page";
+import NotFoundPage from "./features/misc/notFound";
 import ProtectedRoute from "./components/protected-routes";
 import TransactionPage from "./features/transactions/pages/transaction-page";
 
@@ -19,7 +19,7 @@ function App() {
         <nav
         style={{
           display: "flex",
-          justifyContent: "left",
+          justifyContent: "space-between",
           alignItems: "left",
           gap: "16px",
           padding: "16px",
@@ -32,8 +32,18 @@ function App() {
           </>
         ) : (
           <>
-            <Link to="/dashboard">Dashboard</Link>
+            <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+          }}>
+              <Link to="/dashboard">Dashboard</Link>
+              <button onClick={() => window.location.href = "/account"}>Account</button>
+              <button onClick={() => window.location.href = "/categories"}>Categories</button>
+            </div>
             <button onClick={handleLogout}>Logout</button>
+
+            
           </>
         )}
       </nav>
@@ -41,12 +51,12 @@ function App() {
 
         <div style={{ flex: 1, display: "flex", width: "100%" }}>
           <Routes>
-            <Route path="/" element={<Navigate to={token ? "/dashboard" : "/login"} replace />} />
+            <Route path="/" element={<Navigate to={token ? "/transactions" : "/login"} replace />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="*" element={<h1>404 Not Found</h1>} />
+            <Route path="*" element={<NotFoundPage />} />
             <Route path="/register-success" element={<RegisterSuccessPage />} />
-            <Route path="/dashboard" element={<ProtectedRoute><TransactionPage /></ProtectedRoute>} />
+            <Route path="/transactions" element={<ProtectedRoute><TransactionPage /></ProtectedRoute>} />
           </Routes>
         </div>
       </div>

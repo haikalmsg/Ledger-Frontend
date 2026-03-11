@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "../schemas/login-schema";
-import type { LoginSchema } from "../schemas/login-schema";
-import { useLogin } from "../hooks/use-login";
-import type { LoginErrorResponse } from "../types";
+import { loginSchema } from "../../schemas/login-schema";
+import type { LoginSchema } from "../../schemas/login-schema";
+import { useLogin } from "../../hooks/use-login";
+import type { LoginErrorResponse } from "../../types";
 import { AxiosError } from 'axios';
 
 export default function LoginPage() {
@@ -27,7 +27,7 @@ export default function LoginPage() {
     loginMutation.mutate(data, {
       onSuccess: (response) => {
         localStorage.setItem("access_token", response.access_token);
-        window.location.href = "/dashboard";
+        window.location.href = "/transactions";
       },
       onError: (error : Error) => {
         const axiosError = error as AxiosError<LoginErrorResponse>;

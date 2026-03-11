@@ -8,6 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import styles from "./transaction-page.module.css";
+import { useNavigate } from 'react-router-dom';
 
 export default function TransactionPage() {
   const fetchTransactionsMutation = useFetchTransactions();
@@ -15,15 +16,30 @@ export default function TransactionPage() {
   const [errorCode, setErrorCode] = useState<number | null>(null);
   const [page, setPageNumber] = useState<number>(1);
   const [limit, setLimitNumber] = useState<number>(10);
-
+  const [search, setSearch] = useState<string | undefined>(undefined)
+  const [debouncedSearch, setDebouncedSearch] = useState<string | undefined>(undefined);
+  const navigate = useNavigate();
+    const handleButtonView = (id : string) => {
+    // Navigate to the route with the dynamic ID
+    navigate(`details/${id}`);
+  };
   const columnHelper = createColumnHelper<Transaction>();
+    useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      setPageNumber(1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
 
   useEffect(() => {
     setError(null);
     setErrorCode(null);
 
     fetchTransactionsMutation.mutate(
-      { page, limit },
+      { page, limit, search},
       {
         onError: (error: any) => {
           setError(
@@ -35,7 +51,7 @@ export default function TransactionPage() {
         },
       }
     );
-  }, [page, limit]);
+  }, [page, limit, debouncedSearch]);
 
   const table = useReactTable({
     data: fetchTransactionsMutation.data?.data || [],
@@ -70,19 +86,34 @@ export default function TransactionPage() {
           return new Date(value).toLocaleDateString();
         },
       }),
+      columnHelper.accessor("id", {
+      header: "Actions",
+      cell: (info) => (
+        <button onClick={() => handleButtonView(info.getValue())}>
+          View
+        </button>
+      ),
+    })
+   
     ],
     getCoreRowModel: getCoreRowModel(),
   });
 
   const hasNext = fetchTransactionsMutation.data?.next ?? false;
   const hasPrevious = fetchTransactionsMutation.data?.previous ?? false;
+  const handleSearch = (event : React.ChangeEvent<HTMLInputElement>) => {
+
+    setSearch(event.target.value);
+  };
+
 
   return (
     <div className={styles.container}>
       <div className={styles.inner}>
         <h1>Transactions</h1>
         <div className={styles.topbarWrapper}>
-            <input className={styles.searchbar} placeholder="Search Here"></input>
+            <input className={styles.searchbar} value={search} onChange = {handleSearch}placeholder="Search Here"></input>
+            <button onClick={() => window.location.href = "transaction/add-transaction"}>Add Transaction</button>
         </div>
 
         {fetchTransactionsMutation.isPending && (

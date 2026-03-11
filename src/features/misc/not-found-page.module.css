@@ -1,0 +1,79 @@
+.page {
+  width: 100%;
+  min-height: calc(100vh - 72px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.card {
+  width: 100%;
+  max-width: 560px;
+  padding: 48px 32px;
+  border-radius: 24px;
+  background: #141417;
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+  backdrop-filter: blur(10px);
+  text-align: center;
+  animation: fadeUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.code {
+  margin: 0;
+  font-size: 96px;
+  line-height: 1;
+  font-weight: 800;
+  color: #8b5cf6;
+}
+
+.title {
+  margin: 12px 0 8px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.description {
+  margin: 0 auto;
+  max-width: 420px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #a1a1aa;
+}
+
+.actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.primaryButton {
+  display: inline-block;
+  text-decoration: none;
+  background: #8b5cf6;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: 0.2s ease;
+  box-shadow: 0 10px 24px rgba(139, 92, 246, 0.28);
+}
+
+.primaryButton:hover {
+  background: #7c3aed;
+  transform: translateY(-1px);
+}

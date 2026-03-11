@@ -19,7 +19,7 @@
     font-weight: 700;
     letter-spacing: -0.02em;
     color: #ffffff;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .loading {
@@ -40,6 +40,39 @@
     font-size: 0.9rem;
 }
 
+/* Topbar */
+.topbarWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    gap: 12px;
+}
+
+.searchbar {
+    flex: 1;
+    max-width: 240px;
+    padding: 0.45rem 0.85rem;
+    border: 1px solid #3f3f46;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    outline: none;
+    background-color: #18181b;
+    color: #e4e4e7;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.searchbar::placeholder {
+    color: #52525b;
+}
+
+.searchbar:focus {
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+}
+
+/* Table */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -53,12 +86,12 @@
 
 .table th {
     text-align: left;
-    padding: 0.5rem 0.75rem;
+    padding: 0.6rem 0.75rem;
     font-weight: 600;
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #a1a1aa;
+    color: #71717a;
 }
 
 .table tbody tr {
@@ -67,7 +100,7 @@
 }
 
 .table tbody tr:hover {
-    background-color: #27272a;
+    background-color: #1c1c1f;
 }
 
 .table td {
@@ -75,22 +108,30 @@
     color: #e4e4e7;
 }
 
+.emptyState {
+    text-align: center;
+    padding: 3rem 0;
+    color: #52525b;
+    font-size: 0.875rem;
+}
+
+/* Pagination */
 .pagination {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 16px;
-    margin-top: 1.5rem;
+    margin-top: 1.25rem;
     padding-top: 1rem;
-    width : auto
+    border-top: 1px solid #27272a;
 }
 
 .paginationInfo {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #a1a1aa;
-    font-size: 0.85rem;
+    color: #71717a;
+    font-size: 0.8rem;
 }
 
 .paginationButtons {
@@ -104,7 +145,7 @@
     border: 1px solid #7c3aed;
     border-radius: 6px;
     color: #a78bfa;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     cursor: pointer;
     transition: background-color 0.15s ease, color 0.15s ease;
 }
@@ -115,7 +156,7 @@
 }
 
 .pageButton:disabled {
-    opacity: 0.3;
+    opacity: 0.25;
     cursor: not-allowed;
     border-color: #3f3f46;
     color: #52525b;
@@ -127,7 +168,7 @@
     border: 1px solid #3f3f46;
     border-radius: 6px;
     color: #e4e4e7;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     cursor: pointer;
     outline: none;
     transition: border-color 0.15s ease;
@@ -135,28 +176,4 @@
 
 .limitSelect:focus {
     border-color: #7c3aed;
-}
-.searchbar {
-  width: 100%;
-  max-width: 200px;
-  max-height: 30px;
-  padding: 10px 14px;
-  border: 1px solid #d0d5dd;
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-  background-color: #18181b;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.searchbar:focus {
-  border-color: #84a9ff;
-  background-color: #27272a;
-  box-shadow: 0 0 0 3px rgba(132, 169, 255, 0.2);
-}
-
-.topbarWrapper{
-    margin-top: 10px;
-    margin-bottom: 10px;
-
 }
