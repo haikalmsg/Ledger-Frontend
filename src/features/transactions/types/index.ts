@@ -17,7 +17,14 @@ export type Transaction = {
     merchant : string | null;
     created_at : Date | string;
     updated_at : Date | string;
+    account_name : string;
+    category_name : string;
 }
+export type FetchTransactionsParams = {
+  page: number;
+  limit: number;
+  search?: string;
+};
 export type TransactionListResponse = {
     data : Transaction[];
     next : boolean;

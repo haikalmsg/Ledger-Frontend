@@ -11,6 +11,7 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
     window.location.href = "/login";
   };
   return (
@@ -37,7 +38,7 @@ function App() {
             alignItems: "center",
             gap: "12px",
           }}>
-              <Link to="/dashboard">Dashboard</Link>
+              <Link to="/transactions">Dashboard</Link>
               <button onClick={() => window.location.href = "/account"}>Account</button>
               <button onClick={() => window.location.href = "/categories"}>Categories</button>
             </div>

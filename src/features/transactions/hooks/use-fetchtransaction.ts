@@ -1,9 +1,19 @@
-import { useMutation } from "@tanstack/react-query";
-import { fetchTransactions } from "../api/transactions";
-import type { TransactionPaginationPayload, TransactionListResponse } from "../types";
+import { useQuery } from "@tanstack/react-query";
+import {fetchTransactions} from "../api/transactions"
+import type {
+  TransactionListResponse,
+  TransactionPaginationPayload,
+} from "../types";
 
-export function useFetchTransactions() {
-    return useMutation<TransactionListResponse, Error, TransactionPaginationPayload>({
-        mutationFn: fetchTransactions,
-    });
+export function useFetchTransactions(payload: TransactionPaginationPayload) {
+  return useQuery<TransactionListResponse, Error>({
+    queryKey: [
+      "transactions",
+      payload.page,
+      payload.limit,
+      payload.search ?? "",
+    ],
+    queryFn: () => fetchTransactions(payload),
+    placeholderData: (previousData) => previousData,
+  });
 }

@@ -11,9 +11,6 @@ import styles from "./transaction-page.module.css";
 import { useNavigate } from 'react-router-dom';
 
 export default function TransactionPage() {
-  const fetchTransactionsMutation = useFetchTransactions();
-  const [error, setError] = useState<string | null>(null);
-  const [errorCode, setErrorCode] = useState<number | null>(null);
   const [page, setPageNumber] = useState<number>(1);
   const [limit, setLimitNumber] = useState<number>(10);
   const [search, setSearch] = useState<string | undefined>(undefined)
@@ -32,29 +29,20 @@ export default function TransactionPage() {
 
     return () => clearTimeout(timer);
   }, [search]);
-
-
-  useEffect(() => {
-    setError(null);
-    setErrorCode(null);
-
-    fetchTransactionsMutation.mutate(
-      { page, limit, search},
-      {
-        onError: (error: any) => {
-          setError(
-            error.response?.data?.detail ||
-              error.message ||
-              "Failed to fetch transactions"
-          );
-          setErrorCode(error.response?.status || null);
-        },
-      }
-    );
-  }, [page, limit, debouncedSearch]);
+  const fetchTransactionsQuery = useFetchTransactions({
+  page,
+  limit,
+  search: debouncedSearch || undefined,
+  });
+  const queryError = fetchTransactionsQuery.error as any;
+  const errorMessage =
+  queryError?.response?.data?.detail ||
+  queryError?.message ||
+  "Failed to fetch transactions";
+  const errorCode = queryError?.response?.status || null;
 
   const table = useReactTable({
-    data: fetchTransactionsMutation.data?.data || [],
+    data: fetchTransactionsQuery.data?.data || [],
     columns: [
       columnHelper.accessor("occurred_at", {
         header: "Occurred At",
@@ -62,6 +50,12 @@ export default function TransactionPage() {
           const value = info.getValue();
           return new Date(value).toLocaleString();
         },
+      }),
+      columnHelper.accessor("account_name", {
+        header: "Account Name",
+      }),
+      columnHelper.accessor("category_name", {
+        header: "Category Name",
       }),
       columnHelper.accessor("description", {
         header: "Description",
@@ -99,8 +93,8 @@ export default function TransactionPage() {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const hasNext = fetchTransactionsMutation.data?.next ?? false;
-  const hasPrevious = fetchTransactionsMutation.data?.previous ?? false;
+  const hasNext = fetchTransactionsQuery.data?.next ?? false;
+  const hasPrevious = fetchTransactionsQuery.data?.previous ?? false;
   const handleSearch = (event : React.ChangeEvent<HTMLInputElement>) => {
 
     setSearch(event.target.value);
@@ -116,14 +110,17 @@ export default function TransactionPage() {
             <button onClick={() => window.location.href = "transaction/add-transaction"}>Add Transaction</button>
         </div>
 
-        {fetchTransactionsMutation.isPending && (
+        {fetchTransactionsQuery.isPending && (
           <p className={styles.loading}>Loading...</p>
         )}
+        {fetchTransactionsQuery.isError && (
+          <>
+            {errorCode && <h2 className={styles.errorCode}>{errorCode}</h2>}
+            <p className={styles.errorMessage}>Error: {errorMessage}</p>
+          </>
+        )}
 
-        {errorCode && <h2 className={styles.errorCode}>{errorCode}</h2>}
-        {error && <p className={styles.errorMessage}>Error: {error}</p>}
-
-        {fetchTransactionsMutation.isSuccess && (
+        {fetchTransactionsQuery.isSuccess && (
           <>
             <table className={styles.table}>
               <thead>
@@ -184,7 +181,7 @@ export default function TransactionPage() {
               <div className={styles.paginationButtons}>
                 <button
                   onClick={() => setPageNumber((prev) => prev - 1)}
-                  disabled={!hasPrevious || fetchTransactionsMutation.isPending}
+                  disabled={!hasPrevious || fetchTransactionsQuery.isPending}
                   className={styles.pageButton}
                 >
                   Previous
@@ -192,7 +189,7 @@ export default function TransactionPage() {
 
                 <button
                   onClick={() => setPageNumber((prev) => prev + 1)}
-                  disabled={!hasNext || fetchTransactionsMutation.isPending}
+                  disabled={!hasNext || fetchTransactionsQuery.isPending}
                   className={styles.pageButton}
                 >
                   Next
